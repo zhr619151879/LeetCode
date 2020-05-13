@@ -13,43 +13,27 @@ struct TreeNode {
     TreeNode *right;
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
+
 class Solution {
 public:
-    bool recursiveHasPathSum(TreeNode *root, int sum) {
-        if (root == NULL) return false;
-        if (root->left == NULL && root->right == NULL && sum == root->val) {
-            return true;
-        } else
-            return recursiveHasPathSum(root->left, sum - root->val) ||
-                   recursiveHasPathSum(root->right, sum - root->val);
+    int flag = 0;
+    bool hasPathSum(TreeNode *root, int sum){
+        search(root, sum);
+        if(flag) return true;
+        else return false;
     }
 
-    bool iterateHasPathSum(TreeNode *root, int sum) {
-        stack<TreeNode> nodeStack;
-        stack<int> sumStack;
-        nodeStack.push(*root);
-        sumStack.push((sum) - root->val);
-        while (!nodeStack.empty()) {
-            TreeNode temp = nodeStack.top();
-            int curSum = sumStack.top();
-            nodeStack.pop();
-            sumStack.pop();
-            if (temp.left == NULL && temp.right == NULL &&
-                curSum == 0)
-                return true;
-            else{
-                if(temp.right!=NULL){
-                    nodeStack.push(*temp.right);
-                    sumStack.push((curSum-temp.right->val));
-                }
-
-                if(temp.left!=NULL){
-                    nodeStack.push(*temp.left);
-                    sumStack.push((curSum-temp.left->val));
-                }
+    void search(TreeNode *root, int sum){
+        if (!root) return ;
+        
+        if (!root->left && !root->right){
+            if(sum == root->val ){
+                flag = 1;
             }
         }
-        return false;
+        sum -= root->val;
+        search(root->left, sum);
+        search(root->right, sum);
     }
 };
 ```
